@@ -1,0 +1,6 @@
+id,first_name,last_name,email,password,phone,role,status,created_at,updated_at
+c9f1aa2e-0770-44f1-b9e8-ac5fe87cfb92,John,Doe,john@example.com,John@123,9876543210,MEMBER,t,2026-06-30 16:49:45.638193,2026-06-30 16:49:45.638193
+843881cd-1f97-4f7a-b4b7-73de130090db,Alice,Smith,alice@example.com,Alice@123,9876543211,LIBRARIAN,t,2026-06-30 16:49:45.638193,2026-06-30 16:49:45.638193
+57c93461-ce17-4be7-96a2-dd5b4fa10c45,Bob,Johnson,bob@example.com,Bob@123,9876543212,MEMBER,t,2026-06-30 16:49:45.638193,2026-06-30 16:49:45.638193
+f1a10f74-d811-413f-817e-10c9ef199de5,Emma,Williams,emma@example.com,Emma@123,9876543213,ADMIN,t,2026-06-30 16:49:45.638193,2026-06-30 16:49:45.638193
+01f44de3-c243-46b2-bbf2-e2951f39f376,David,Brown,david@example.com,David@123,9876543214,MEMBER,t,2026-06-30 16:49:45.638193,2026-06-30 16:49:45.638193

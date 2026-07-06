@@ -1,0 +1,111 @@
+generator client {
+  provider = "prisma-client-js"
+
+}
+
+datasource db {
+  provider = "postgresql"
+  url =  env("DATABASE_URL")
+}
+
+model authors {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String    @db.VarChar(100)
+  biography   String?
+  nationality String?   @db.VarChar(50)
+  created_at  DateTime? @default(now()) @db.Timestamp(6)
+  updated_at  DateTime? @default(now()) @db.Timestamp(6)
+  books       books[]
+
+  @@index([name], map: "idx_authors_name")
+}
+
+model book_contents {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  book_id    String    @unique @db.Uuid
+  content    String
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+  updated_at DateTime? @default(now()) @db.Timestamp(6)
+  books      books     @relation(fields: [book_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_book")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model books {
+  id               String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title            String           @db.VarChar(255)
+  isbn             String           @unique @db.VarChar(20)
+  author_id        String           @db.Uuid
+  category_id      String           @db.Uuid
+  publication_year Int?
+  publisher        String?          @db.VarChar(150)
+  language         String?          @default("English") @db.VarChar(50)
+  total_copies     Int              @default(1)
+  available_copies Int              @default(1)
+  shelf_location   String?          @db.VarChar(30)
+  created_at       DateTime?        @default(now()) @db.Timestamp(6)
+  updated_at       DateTime?        @default(now()) @db.Timestamp(6)
+  book_contents    book_contents?
+  authors          authors          @relation(fields: [author_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_author")
+  categories       categories       @relation(fields: [category_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_category")
+  borrow_records   borrow_records[]
+
+  @@index([author_id], map: "idx_books_author")
+  @@index([author_id, category_id], map: "idx_books_author_category")
+  @@index([category_id], map: "idx_books_category")
+  @@index([title], map: "idx_books_title")
+}
+
+model borrow_records {
+  id          String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id     String        @db.Uuid
+  book_id     String        @db.Uuid
+  borrow_date DateTime      @db.Date
+  due_date    DateTime      @db.Date
+  return_date DateTime?     @db.Date
+  status      borrow_status @default(BORROWED)
+  created_at  DateTime?     @default(now()) @db.Timestamp(6)
+  books       books         @relation(fields: [book_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_borrow_book")
+  users       users         @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user")
+
+  @@index([book_id], map: "idx_borrow_book")
+  @@index([due_date], map: "idx_borrow_due_date")
+  @@index([status], map: "idx_borrow_status")
+  @@index([user_id], map: "idx_borrow_user")
+}
+
+model categories {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name        String    @unique @db.VarChar(100)
+  description String?
+  created_at  DateTime? @default(now()) @db.Timestamp(6)
+  updated_at  DateTime? @default(now()) @db.Timestamp(6)
+  books       books[]
+
+  @@index([name], map: "idx_categories_name")
+}
+
+model users {
+  id             String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  first_name     String           @db.VarChar(50)
+  last_name      String           @db.VarChar(50)
+  email          String           @unique(map: "idx_users_email") @db.VarChar(100)
+  password       String           @db.VarChar(255)
+  phone          String?          @unique(map: "idx_users_phone") @db.VarChar(15)
+  role           user_role        @default(MEMBER)
+  status         Boolean?         @default(true)
+  created_at     DateTime?        @default(now()) @db.Timestamp(6)
+  updated_at     DateTime?        @default(now()) @db.Timestamp(6)
+  borrow_records borrow_records[]
+}
+
+enum borrow_status {
+  BORROWED
+  RETURNED
+  OVERDUE
+}
+
+enum user_role {
+  ADMIN
+  LIBRARIAN
+  MEMBER
+}
