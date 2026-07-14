@@ -10,8 +10,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git branch: 'main',
-                    url: 'https://github.com/Poojabajjuri/Library_Management.git'
+                checkout scm
             }
         }
 
