@@ -34,9 +34,15 @@ pipeline {
             }
         }
 
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t library-management:latest .'
+            }
+        }
+
         stage('Build Complete') {
             steps {
-                echo 'Library Management project built successfully!'
+                echo 'Library Management Docker image built successfully!'
             }
         }
     }
