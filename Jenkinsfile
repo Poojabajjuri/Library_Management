@@ -66,5 +66,24 @@ pipeline {
                 echo 'Docker image pushed successfully!'
             }
         }
+        stage('Deploy Container') {
+    steps {
+        sh '''
+        docker stop library-management || true
+        docker rm library-management || true
+
+        docker run -d \
+        --name library-management \
+        -p 3000:3000 \
+        pooja9989/library-management:latest
+        '''
+    }
+}
+
+stage('Deployment Complete') {
+    steps {
+        echo 'Application deployed successfully!'
+    }
+}
     }
 }
