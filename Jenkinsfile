@@ -75,6 +75,7 @@ pipeline {
         docker run -d \
         --name library-management \
         -p 3000:3000 \
+        -e DATABASE_URL="postgresql://postgres:Iampooja@123@host.docker.internal:5432/library_db" \
         pooja9989/library-management:latest
         '''
     }
