@@ -1,6 +1,6 @@
 const prisma = require("../prisma");
 const refreshMaterializedView = require("../utils/refreshMaterializedView");
-const { sendBookMessage } = require("../services/sqs");
+const { sendBookMessage } = require("../../services/sqs");
 
 async function getBooks(req, res) {
 
