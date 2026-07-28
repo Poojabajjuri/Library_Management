@@ -1,5 +1,6 @@
 const prisma = require("../prisma");
 const refreshMaterializedView = require("../utils/refreshMaterializedView");
+const { sendBookMessage } = require("../services/sqs");
 
 async function getBooks(req, res) {
 
@@ -192,6 +193,13 @@ const createBook = async (req, res) => {
 
 
         await refreshMaterializedView();
+
+        await sendBookMessage({
+            event: "BOOK_CREATED",
+            title: book.title,
+            author_id: book.author_id,
+            isbn: book.isbn
+        });
 
         res.status(201).json({
 
