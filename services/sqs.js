@@ -16,10 +16,20 @@ async function sendBookMessage(message) {
         MessageBody: JSON.stringify(message)
     });
 
+    try {
+
     const result = await client.send(command);
 
     console.log("SQS Response:");
     console.log(result);
+
+} catch (err) {
+
+    console.error("AWS SDK ERROR:");
+    console.error(err);
+
+    throw err;
+}
 }
 
 module.exports = { sendBookMessage };

@@ -196,14 +196,23 @@ const createBook = async (req, res) => {
 
         console.log("Calling sendBookMessage...");
 
-        await sendBookMessage({
-            event: "BOOK_CREATED",
-            title: book.title,
-            author_id: book.author_id,
-            isbn: book.isbn
-        });
+try {
 
-        console.log("Message sent successfully.");
+    await sendBookMessage({
+        event: "BOOK_CREATED",
+        title: book.title,
+        author_id: book.author_id,
+        isbn: book.isbn
+    });
+
+    console.log("Message sent successfully.");
+
+} catch (err) {
+
+    console.error("SQS ERROR:");
+    console.error(err);
+
+}
 
         res.status(201).json({
 
