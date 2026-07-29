@@ -1,7 +1,10 @@
+
 console.log("BOOK CONTROLLER FILE LOADED");
 const prisma = require("../prisma");
 const refreshMaterializedView = require("../utils/refreshMaterializedView");
 const { sendBookMessage } = require("../../services/sqs");
+
+console.log("BOOK CONTROLLER FILE:", __filename);
 
 async function getBooks(req, res) {
 
