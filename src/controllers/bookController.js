@@ -1,10 +1,6 @@
-
-console.log("BOOK CONTROLLER FILE LOADED");
 const prisma = require("../prisma");
 const refreshMaterializedView = require("../utils/refreshMaterializedView");
 const { sendBookMessage } = require("../../services/sqs");
-
-console.log("BOOK CONTROLLER FILE:", __filename);
 
 async function getBooks(req, res) {
 
@@ -159,12 +155,76 @@ const searchBookContent = async (req, res) => {
 
 const createBook = async (req, res) => {
 
-    console.log("########## JULY-29-TEST ##########");
+    try {
 
-    return res.status(200).json({
-        success: true,
-        message: "JULY-29-TEST"
-    });
+        const {
+
+            title,
+            isbn,
+            author_id,
+            category_id,
+            publication_year,
+            publisher,
+            language,
+            total_copies,
+            available_copies,
+            shelf_location,
+
+        } = req.body;
+
+        const book = await prisma.books.create({
+
+            data: {
+
+                title,
+                isbn,
+                author_id,
+                category_id,
+                publication_year,
+                publisher,
+                language,
+                total_copies,
+                available_copies,
+                shelf_location
+
+            }
+
+        });
+
+
+        await refreshMaterializedView();
+
+        await sendBookMessage({
+            event: "BOOK_CREATED",
+            title: book.title,
+            author_id: book.author_id,
+            isbn: book.isbn
+        });
+
+        res.status(201).json({
+
+            success: true,
+            message: "Book created successfully",
+
+            data: book
+
+        });
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+
+            success: false,
+
+            message: error.message
+
+        });
+
+    }
 
 };
 
