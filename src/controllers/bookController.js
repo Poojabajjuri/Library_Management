@@ -159,6 +159,10 @@ const createBook = async (req, res) => {
     console.log("========== CREATE BOOK START ==========");
     console.log(req.body);
 
+    return res.status(200).json({
+        message: "CREATEBOOK WAS CALLED"
+    });
+
     try {
 
         const {
