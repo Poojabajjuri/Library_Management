@@ -194,12 +194,16 @@ const createBook = async (req, res) => {
 
         await refreshMaterializedView();
 
+        console.log("Calling sendBookMessage...");
+
         await sendBookMessage({
             event: "BOOK_CREATED",
             title: book.title,
             author_id: book.author_id,
             isbn: book.isbn
         });
+
+        console.log("Message sent successfully.");
 
         res.status(201).json({
 
