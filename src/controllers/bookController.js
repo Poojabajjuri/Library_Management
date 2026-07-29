@@ -155,6 +155,9 @@ const searchBookContent = async (req, res) => {
 
 const createBook = async (req, res) => {
 
+    console.log("========== CREATE BOOK START ==========");
+    console.log(req.body);
+
     try {
 
         const {
