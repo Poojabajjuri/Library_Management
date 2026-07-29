@@ -157,95 +157,12 @@ const searchBookContent = async (req, res) => {
 const createBook = async (req, res) => {
 
     console.log("========== CREATE BOOK START ==========");
-    console.log(req.body);
+    console.log("BODY:", req.body);
 
     return res.status(200).json({
+        success: true,
         message: "CREATEBOOK WAS CALLED"
     });
-
-    try {
-
-        const {
-
-            title,
-            isbn,
-            author_id,
-            category_id,
-            publication_year,
-            publisher,
-            language,
-            total_copies,
-            available_copies,
-            shelf_location,
-
-        } = req.body;
-
-        const book = await prisma.books.create({
-
-            data: {
-
-                title,
-                isbn,
-                author_id,
-                category_id,
-                publication_year,
-                publisher,
-                language,
-                total_copies,
-                available_copies,
-                shelf_location
-
-            }
-
-        });
-
-
-        await refreshMaterializedView();
-
-        console.log("Calling sendBookMessage...");
-
-try {
-
-    await sendBookMessage({
-        event: "BOOK_CREATED",
-        title: book.title,
-        author_id: book.author_id,
-        isbn: book.isbn
-    });
-
-    console.log("Message sent successfully.");
-
-} catch (err) {
-
-    console.error("SQS ERROR:");
-    console.error(err);
-
-}
-
-        res.status(201).json({
-
-            success: true,
-            message: "Book created successfully",
-
-            data: book
-
-        });
-
-    }
-
-    catch (error) {
-
-        console.error(error);
-
-        res.status(500).json({
-
-            success: false,
-
-            message: error.message
-
-        });
-
-    }
 
 };
 
