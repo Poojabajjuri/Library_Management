@@ -159,12 +159,11 @@ const searchBookContent = async (req, res) => {
 
 const createBook = async (req, res) => {
 
-    console.log("========== CREATE BOOK START ==========");
-    console.log("BODY:", req.body);
+    console.log("########## JULY-29-TEST ##########");
 
     return res.status(200).json({
         success: true,
-        message: "CREATEBOOK WAS CALLED"
+        message: "JULY-29-TEST"
     });
 
 };
