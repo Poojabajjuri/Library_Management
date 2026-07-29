@@ -1,3 +1,4 @@
+console.log("BOOK CONTROLLER FILE LOADED");
 const prisma = require("../prisma");
 const refreshMaterializedView = require("../utils/refreshMaterializedView");
 const { sendBookMessage } = require("../../services/sqs");
